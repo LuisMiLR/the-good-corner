@@ -14,6 +14,7 @@ import { buildSchema } from "type-graphql";
 import { dataSource } from "./datasource";
 import { AdMutations } from "./graphql-resolvers/AdMutations";
 import { CategoriesQueries } from "./graphql-resolvers/CategoriesQueries";
+import { initTestData } from "./datasource";
 
 const port = 4000;
 
@@ -30,6 +31,8 @@ async function startServerApollo() {
     });
 
     await dataSource.initialize();
+
+    await initTestData()
 
     const { url } = await startStandaloneServer(server, {
         listen: { port },
