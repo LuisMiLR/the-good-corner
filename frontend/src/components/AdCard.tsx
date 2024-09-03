@@ -1,24 +1,35 @@
-import React from "react";
+import styles from "./AdCard.module.css";
 
 export type AdCardProps = {
+  id: number;
   title: string;
-  imgUrl: string;
+  description?: string;
   price: number;
-  link: string;
+  picture?: string;
 };
-export default function AdCard({ title, imgUrl, price, link }: AdCardProps) {
+export function AdCard({
+  id,
+  description,
+  title,
+  price = 0,
+  picture,
+}: AdCardProps) {
   return (
-    <div className="ad-card-container">
+    <div className={styles.container}>
       <a
-        className="ad-card-link"
-        href={link}>
+        className={styles["ad-card-link"]}
+        href={`/ads/${id}`}>
         <img
-          className="ad-card-image"
-          src={imgUrl}
+          className={styles["ad-card-image"]}
+          src={picture ?? "/images/file-question.svg"}
         />
-        <div className="ad-card-text">
-          <div className="ad-card-title">{title}</div>
-          <div className="ad-card-price">{price}</div>
+        <div className={styles["ad-card-text"]}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div className={styles["ad-card-title"]}>{title}</div>
+            {description && <div>{description.toUpperCase()}</div>}
+          </div>
+
+          <div className={styles["ad-card-price"]}>{price} €</div>
         </div>
       </a>
     </div>

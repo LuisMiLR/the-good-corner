@@ -1,58 +1,50 @@
-import React from "react";
-import AdCard from "./AdCard";
-import { AdCardProps } from "./AdCard";
+import { useEffect, useState } from "react";
+import { AdCard, AdCardProps } from "./AdCard";
+import axios from "axios";
+
+const BACKEND_URL = "http://localhost:4000";
+
+async function fetchAds(): Promise<AdCardProps[]> {
+  try {
+    const { data } = await axios.get<AdCardProps[]>(BACKEND_URL + "/ads");
+    return data.sort((adLeft: AdCardProps, adRight: AdCardProps) =>
+      adLeft.title < adRight.title ? -1 : 1
+    );
+  } catch (e) {
+    console.error(e, "cannot fetch ads - falling back to empty array");
+    return [];
+  }
+}
 
 export function RecentAds() {
-  const ads: AdCardProps[] = [
-    {
-      imgUrl: "/images/table.webp",
-      link: "/ads/table",
-      price: 120,
-      title: "Table",
-    },
-    {
-      imgUrl: "/images/dame-jeanne.webp",
-      link: "/ads/vide-poche",
-      price: 75,
-      title: "Dame-jeanne",
-    },
-    {
-      imgUrl: "/images/vide-poche.webp",
-      link: "/ads/table",
-      price: 4,
-      title: "Vide-poche",
-    },
-    {
-      imgUrl: "/images/vaisselier.webp",
-      link: "/ads/vaisselier",
-      price: 900,
-      title: "Vaisselier",
-    },
-    {
-      imgUrl: "/images/bougie.webp",
-      link: "/ads/bougie",
-      price: 8,
-      title: "Bougie",
-    },
-    {
-      imgUrl: "/images/porte-magazine.webp",
-      link: "/ads/porte-magazine",
-      price: 45,
-      title: "Porte-magazine",
-    },
-  ];
+  const [totalPrice, setTotalPrice] = useState<number>();
+  const [ads, setAds] = useState<AdCardProps[]>([]);
+
+  async function initAds() {
+    const ads: AdCardProps[] = await fetchAds();
+    setAds(ads);
+  }
+
+  useEffect(() => {
+    console.log("initialisation du totalPrice à 0");
+    initAds();
+    setTotalPrice(0);
+  }, []);
+
+  function addPrice(price: number): void {
+    setTotalPrice(totalPrice! + price);
+  }
   return (
     <>
-      <h2>Annonces récentes</h2>
+      <span>Le prix total est : {totalPrice}</span>
       <section className="recent-ads">
-        {ads.map((ad) => (
-          <AdCard
-            imgUrl={ad.imgUrl}
-            link={ad.link}
-            price={ad.price}
-            title={ad.title}
-            key={ad.title}
-          />
+        {ads.map((adProps, index: number) => (
+          <div key={index}>
+            <AdCard {...adProps} />
+            <button onClick={() => addPrice(adProps.price)}>
+              Add this price to total
+            </button>
+          </div>
         ))}
       </section>
     </>
