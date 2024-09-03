@@ -7,7 +7,7 @@ export const dataSource = new DataSource({
   //type de datasource
   type: 'postgres',
   //parametre de connexion à la BDD
-  host: 'localhost',
+  host: 'db',
   port: 5432, //port standard de postgres
   database: 'the_good_corner',
   username: 'myuser',
