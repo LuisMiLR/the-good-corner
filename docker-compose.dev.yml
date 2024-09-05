@@ -20,10 +20,10 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - WDS_SOCKET_HOST=127.0.0.1
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-      - THEGOODCORNER_DBPASS=example
+      WDS_SOCKET_HOST: 127.0.0.1
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+      THEGOODCORNER_DBPASS: ${DBPASS}
 
   db:
     image: postgres:16
@@ -38,7 +38,7 @@ services:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${DBPASS}
     ports:
       - "5432:5432"
     volumes: 
