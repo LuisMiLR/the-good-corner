@@ -7,6 +7,10 @@ services:
       - 3000:3000
     volumes:
       - ./frontend:/webapp
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
 
   back:
     build: ./backend
@@ -15,6 +19,11 @@ services:
       - 4000:4000
     volumes:
       - ./backend:/app
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - THEGOODCORNER_DBPASS=example
 
   db:
     image: postgres:16

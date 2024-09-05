@@ -11,7 +11,7 @@ export const dataSource = new DataSource({
   port: 5432, //port standard de postgres
   database: 'the_good_corner',
   username: 'myuser',
-  password: 'example',
+  password: process.env.THEGOODCORNER_DBPASS,
   //parametre typeORM
   entities: ['src/entities/*.ts'],
   synchronize: true,
